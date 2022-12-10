@@ -3,9 +3,9 @@
 using  namespace std;
 
 
-
 int main(){
-    stg cade[1] = {"hello"};
-    cade[0] += " world";
-    cout << cade[0].get();  
+    stg e = "textual ";
+    e += "nuevo texto";
+
+    cout << e.get() << "\nconsegir una localidad: por ejemplo : " << e.getLoc(6,e.length()-6);
 }

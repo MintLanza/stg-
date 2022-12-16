@@ -1,10 +1,31 @@
+/*
+    union de operaciones basicas para la cadena char*, seria como usar string pero va para el puntero
+    y codigo basico +entendible,  
+    entre sus funciones esta:
+      calcular longitud de la cadena, 
+      concatenar dos cadenas, y 
+      reemplazar una parte de una cadena por otra,
+      concatenar otra cadena a la original
+      reemplazar una parte de la cadena con otra
+      cambiar un caracter
+      con todo esto facilita la modificacion de la cadena contra ella 
+        ..
+   ::7777/    .   \\
+    7*777777\     77777s\          creado por @MintLanza
+       77*777777/ /7777_777/s/      
+        7*7777777777s/''  '           github: https://github.com/MintLanza
+        /7777777s  ______               creado por: ian
+       /7777s       s77iP           programacion en lenguage: c++ >:/
+       \77777777///77ii/            
+         \777777777                 
+
+*/
 
 class stg{
   private:
-  char *date = 0; // alamcenamiento
-  typedef long long ulong; // se usa para tener un numbero de lectura mas grande
-  // contador de caracter, respecto a sizeof este no tiene encierta manera fallos 
-  long lengthCa(char *txt) 
+  char *date = 0; // almacen
+  typedef long long ulong; // mas numeros xd
+  long lengthCa(char *txt) // contador
   {
     if (!txt)
     {
@@ -18,10 +39,10 @@ class stg{
 
     return tmp;
   }
-  // suma de dos parametros char*
-  char *sumCa(char *txt, char *add)
+
+  char *sumCa(char *txt, char *add) // suma de datos
   {
-    char *res = new char[lengthCa(txt) + lengthCa(add)];
+    char *res = new char[sizeof(txt) + sizeof(add)];
     char *deb = res;
     do
     {
@@ -53,18 +74,16 @@ public:
   {
     date = sumCa(date, (char *)text);
   }
-  ::stg operator+(stg const &text){
-    date = sumCa(date, text.date);
-  }
-  ::stg operator+(char *const &text){
-    date = sumCa(date, (char *)text);
-  }
+  ::stg operator+(stg &text){
+    return sumCa(date, text.date);
+    }
+    
   const char *get()
   {
     return date;
   }
-  
-  char *replace(ulong __s, ulong __e, char *newText)
+
+  char *replace(ulong __s, ulong __e, char *newText) // remplazar
   {
     long tmp = lengthCa(date);
     char *cn = new char[tmp];
@@ -98,8 +117,7 @@ public:
     date[num] = character;
   }
 
-    //selecion para analizar un dato de cierta localidad
-  char *getLoc(int start, int end)
+  char *getLoc(int start, int end) // obtencion
   {
     char *IO = new char[end - start];
     char *res = IO;

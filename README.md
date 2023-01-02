@@ -16,3 +16,10 @@
             creado por: ian
             programacion en lenguage: c++ >:/
      
+me pillo un error en sumCa, estube usando sizeof cual es incorrecto, genero un problema en la redaccion de muchas sumas ya que este declaraba cadenas con un tamaño de 2 punteros incorrectamente 
+generando un clip en la sumas de todo el texto a sumas ya que ordena asignar un caracter en una localidad no exstente:
+````
+res por sizeof es de 2 caracters
+    res[3] = txt[3] // genera error ya que no hat mas de 2 caracteres
+````
+solucion mejor ordenar el temao por la misma funcionn de stg, length()

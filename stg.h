@@ -21,116 +21,144 @@
 
 */
 
-class stg{
-  private:
-  char *date = 0; // almacen
-  typedef long long ulong; // mas numeros xd
-  long lengthCa(char *txt) // contador
-  {
-    if (!txt)
-    {
-      return 0;
+
+bool isFont(char character){
+    try{
+    if((character >= 65 && character <= 90) || (character >= 97 && character <= 122)){
+        return true;
     }
-    long tmp = 0;
-    while (txt[tmp] != '\0')
-    {
-      tmp++;
-    }
-
-    return tmp;
-  }
-
-  char *sumCa(char *txt, char *add) // suma de datos
-  {
-    char *res = new char[sizeof(txt) + sizeof(add)];
-    char *deb = res;
-    do
-    {
-      *res = *txt;
-      *res++;
-    } while (*txt++ != '\0');
-
-    res--;
-    do
-    {
-      *res = *add;
-      *res++;
-    } while (*add++ != '\0');
-
-    *res = '\0';
-
-    return deb;
-  }
-
-public:
-  stg(const char *text)
-  {
-    date = (char *)text;
-  }
-  long length(){
-    return lengthCa(date);
-  }
-  void operator+=(const char *text)
-  {
-    date = sumCa(date, (char *)text);
-  }
-  ::stg operator+(stg &text){
-    return sumCa(date, text.date);
+    }catch(const std::exception& e){
+        return false;
     }
     
-  const char *get()
-  {
-    return date;
-  }
-
-  char *replace(ulong __s, ulong __e, char *newText) // remplazar
-  {
-    long tmp = lengthCa(date);
-    char *cn = new char[tmp];
-    long n1 = 0;
-    __s += 1;
-    while (n1 != __s)
-    {
-      cn[n1] = date[n1];
-      n1 += 1;
+    
+    return false;
+}
+bool FontIsNumber(char character){
+    try{
+    if(character == 48 || 48 < character && character < 58 || character == 57){
+        return true;
     }
-    cn = sumCa(cn, newText);
-    n1 += lengthCa(newText);
-    tmp = (tmp - (__e - __s)) + lengthCa(newText);
-    __e++;
-    while (__e != tmp)
-    {
-      cn[n1] = date[__e];
-      n1 += 1;
-      __e += 1;
+    }catch(const std::exception& e){
+        return false;
     }
-    date = cn;
-    return cn;
-  }
+    return false;
+}
+bool FontINum(char character){
+    try{
+    if(isFont(character) || FontIsNumber(character)){
+        return true;
+    }
+    }catch(const std::exception& e){
+        return false;
+    }
+    return false;
+}
 
-  char operator[](long num)
-  {
-    return date[num];
-  }
-  void edit(long num, char character)
-  {
-    date[num] = character;
-  }
+class stg {
+private:
+    const char* data = 0;
+    char* sumCa(char *txt, char *add) {
+        char *res = new char[stg(txt).length() + stg(add).length()];
+        char *deb = res;
+            do{
+                *res = *txt;
+                *res++;
+            } while (*txt++ != '\0');
+        res--;
+        do{
+            *res = *add;
+            *res++;
+        } while (*add++ != '\0');
+        *res = '\0';
+        return deb;
+     }
+public:
+    stg(const char* text = ""){
+        data = text;
+    }
 
-  char *getLoc(int start, int end) // obtencion
-  {
-    char *IO = new char[end - start];
-    char *res = IO;
-    long long i = start;
+    stg operator+(const stg &_adder_text)  {
+         data = sumCa((char*)data, (char*)_adder_text.data);
+    }
 
-    end += 1;
-    do
-    {
-      *IO = date[i];
-      *IO++;
-      i += 1;
-    } while (!(end < i+1));
-    return res;
-  }
+    stg operator+(const char* _adder_text)  {
+         data = sumCa((char*)data, (char*)_adder_text);
+    }
+    stg operator+(char c)  {
+         data = sumCa((char*)data,(char*)c);
+    }
+    stg operator+=(const char* _adder_Text) {
+         data = sumCa((char*)data, (char*)_adder_Text);
+    }
+    stg operator+=(char c) {
+         data = sumCa((char*)data, (char*)c);
+    }
+
+    long length() const {
+            if (!data){
+                return 0;
+            }
+            long tmp = 0;
+            while (data[tmp] != '\0'){
+                tmp++;
+            }
+        return tmp;
+    }
+
+    char operator[](long localidad) const {
+        return data[localidad];
+    }
+
+    const char* get(long start, long end){
+        if(start < 0 || end <= start || end < 0){
+            return "";
+        }
+        if(end < 1){
+            return "";
+        }
+        char *IO = new char[end - start];
+        char *res = IO;
+        long long i = start;
+        do{
+            *IO = data[i];
+            *IO++;
+            i += 1;
+        } while (!(end < i+1));
+        return (const char*)res;
+    }
+    const char* get() const {
+        return data;
+    }
+    const char* operator()() const {
+        return data;
+    }
+    char* operator()() {
+        return (char*)data;
+    }
+    bool IS(const char* argm, long type = 0){
+        if(type == 1){
+            if(stg(argm).length() < length()){
+                return false;
+            }
+            for (size_t i = 0; i < stg(argm).length(); i++){
+                if(argm[i] !=  data[i]){
+                    return false;
+                }
+            }
+            return true;
+        }
+        if(argm == data){
+            return true;
+        }
+        return false;
+    }
+    const char* replace(const char* adder_text, long start, long end){
+        stg io = get(0, start);
+        io += adder_text;
+        io += get(end, length());
+        data = io.get();
+        return data;
+    }
+
 };
-
